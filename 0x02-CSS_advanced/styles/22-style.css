@@ -134,10 +134,10 @@ ul.row {
 .card-category {
   color: var(--color-primary);
 }
-[data-section-theme=“dark”] {
-    --text-color: var(--color-white);
-    --section-title-color: var(--color-white);
-    background: var(--color-black);
+[data-section-theme="dark"] {
+  --text-color: var(--color-white);
+  --section-title-color: var(--color-white);
+  background-color: var(--color-black);
 }
 .section {
   padding: var(--section-padding);
