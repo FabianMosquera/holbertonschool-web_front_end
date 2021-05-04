@@ -1,0 +1,17 @@
+/* Extended */
+$color: #00ff00;
+$color2: #ff0000;
+
+.info {
+  font-size: 12px;
+}
+
+.success {
+  @extend .info;
+  color: $color;
+}
+
+.warning {
+  @extend .info;
+  color: $color2;
+}
