@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Login to the website</h1>
+    <input type="text" id="firstname" placeholder="Firstname">
+    <input type="text" id="email" placeholder="Email">
+    <button onclick="setCookies()">Log me in</button>
+    <h1>Cookies</h1>
+    <button onclick="showCookies()">Show the Cookies</button>
+
+    <script>
+        function setCookies() {
+            const date = new Date();
+            date.setDate(date.getDate() + 10)
+
+            let expireDate = date.toUTCString()
+
+            let firstname = document.getElementById('firstname').value;
+            let email = document.getElementById('email').value;
+            document.cookie = `firstname=${firstname} expires=${expireDate}; path=/`;
+            document.cookie = `email=${email} expires=${expireDate}; path=/`;
+        }
+
+        function showCookies() {
+            let body = document.querySelector('body')
+            let paragraph = document.createElement('p')
+
+            paragraph.innerHTML = `Cookies: ${document.cookie}`
+            body.append(paragraph)
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            console.log(value);
+            const parts = value.split(`; ${name}=`);
+            console.log(parts);
+            if (parts.length === 2) {
+                return parts.pop().split(';').shift();
+            }
+            return "";
+        }
+        
+    </script>
+</body>
+</html>
