@@ -12,7 +12,7 @@
       let availableItems = ["Shampoo", "Soap", "Sponge", "Water"];
 
       function getCartFromStorage() {
-        if (window.sessionStorage.length) {
+        if (window.sessionStorage.length > 0) {
           return JSON.parse(window.sessionStorage.cart);
         }
         return {};
@@ -32,6 +32,7 @@
       }
 
       function removeItemfromCart(item) {
+        console.log(item);
         let elements = getCartFromStorage();
         delete elements[item];
         window.sessionStorage.setItem("cart", JSON.stringify(elements));
@@ -44,8 +45,9 @@
       }
 
       function createStore() {
-        let h2 = document.createElement("h2");
-        h2.append("Available products:");
+        let available = document.createElement("h2");
+        available.append("Available products:");
+
         let ul = document.createElement("ul");
         for (item of availableItems) {
           let li = document.createElement("li");
@@ -53,53 +55,54 @@
           li.addEventListener("click", function () {
             addItemToCart(this.textContent);
           });
+
           ul.append(li);
         }
-        document.body.append(h2, ul);
+        document.body.append(available, ul);
       }
 
       function displayCart() {
-
-        let div = document.querySelector("div");
-        if (div) {
-            let cartList = document.querySelector("div > ul:last-child");
-            cartList.remove()  
+        let container = document.querySelector("div");
+        if (container) {
+          let cartList = document.querySelector("div > ul:last-child");
+          cartList.remove();
         } else {
-            let cartTitle = document.createElement("h2")
-            cartTitle.append("Your cart:")
-            let div = document.createElement("div")
-            document.body.append(cartTitle, div)
+          let cartTitle = document.createElement("h2");
+          cartTitle.append("Your cart:");
+          let div = document.createElement("div");
+
+          document.body.append(cartTitle, div);
         }
-        updateCart()
+        updateCart();
       }
 
       function updateCart() {
+        let container = document.querySelector("div");
+        let cartList = document.createElement("ul");
+        let item = document.createElement("li");
+        cartList.append(item);
+        container.append(cartList);
+
+        let firstItem = document.querySelector("div > ul > li:nth-child(1)");
+
         let cart = getCartFromStorage();
-        let cartUl = document.createElement("ul");
-        document.getElementsByTagName("div")[0].appendChild(cartUl);
-
-        if (Object.keys(cart).length !== 0) {
-          let clearCartLi = document.createElement("li");
-          clearCartLi.appendChild(document.createTextNode("Clear my cart"));
-          clearCartLi.onclick = function () {
-            clearCart();
-          };
-          cartUl.appendChild(clearCartLi);
-
-          for (let item in cart) {
-            let itemLi = document.createElement("li");
-            itemLi.appendChild(
-              document.createTextNode(`${item} x ${cart[item]} (remove)`)
-            );
-            itemLi.onclick = function () {
-              removeItemfromCart(item);
-            };
-            cartUl.appendChild(itemLi);
-          }
+        if (Object.keys(cart).length === 0) {
+          firstItem.append("Your cart is empty");
         } else {
-          let cartEmpty = document.createElement("li");
-          cartEmpty.appendChild(document.createTextNode("Your cart is empty"));
-          cartUl.appendChild(cartEmpty);
+          firstItem.innerHTML = "Clear my cart";
+          firstItem.addEventListener("click", () => clearCart());
+
+          let elements = getCartFromStorage();
+          for (key of Object.keys(elements)) {
+            let li = document.createElement("li");
+            let span = document.createElement("span");
+            span.append("(remove)");
+            span.addEventListener("click", () => removeItemfromCart(key));
+
+            let text = `${key} x ${elements[key]} `;
+            li.append(text, span);
+            cartList.append(li);
+          }
         }
       }
 
